@@ -16,6 +16,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+infra/scripts/tf-state-policy.json
+
 # perstonal notes folder
 /study
 
