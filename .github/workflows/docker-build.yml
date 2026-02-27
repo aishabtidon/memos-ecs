@@ -26,19 +26,34 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region:     ${{ env.AWS_REGION }}
 
+      - name: Verify workspace (diagnostic)
+        run: |
+          set -e
+          echo "Build context (repo root):"
+          ls -la
+          echo "app/memos (required for Dockerfile COPY):"
+          ls -la app/memos/
+          test -f Dockerfile || (echo "ERROR: Dockerfile not found" && exit 1)
+          test -f app/memos/web/package.json || (echo "ERROR: app/memos/web/package.json not found" && exit 1)
+          test -f app/memos/go.mod || (echo "ERROR: app/memos/go.mod not found" && exit 1)
+
       - name: Login to ECR
         run: |
+          set -e
           ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
           aws ecr get-login-password --region ${{ env.AWS_REGION }} | \
             docker login --username AWS --password-stdin ${ACCOUNT}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
 
       - name: Build image
-        run: docker build -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} -f Dockerfile .
+        run: |
+          set -e
+          docker build -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} -f Dockerfile .
 
       - name: Tag and push to ECR
         run: |
+          set -e
           ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-          IMAGE_URI="${ACCOUNT}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${GITHUB_SHA}"
-          docker tag ${{ env.ECR_REPOSITORY }}:${{ github.sha }} $IMAGE_URI
-          docker push $IMAGE_URI
+          IMAGE_URI="${ACCOUNT}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${GITHUB_SHA}"
+          docker tag ${{ env.ECR_REPOSITORY }}:${{ github.sha }} "$IMAGE_URI"
+          docker push "$IMAGE_URI"
     

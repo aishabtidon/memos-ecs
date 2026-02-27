@@ -24,7 +24,7 @@ RUN cd web && pnpm run release
 
 # 2) Backend build stage
 
-FROM golang:1.25-alpine AS backend-build
+FROM golang:1.25-alpine3.22 AS backend-build
 
 RUN apk add --no-cache git ca-certificates
 
