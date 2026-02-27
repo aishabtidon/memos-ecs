@@ -83,7 +83,12 @@ locals {
     },
     {
       Effect   = "Allow"
-      Action   = ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage", "ecr:PutImage", "ecr:InitiateLayerUpload", "ecr:UploadLayerPart", "ecr:CompleteLayerUpload", "ecr:CreateRepository", "ecr:DescribeRepositories", "ecr:ListTagsForResource", "ecr:GetLifecyclePolicy"]
+      Action   = ["ecr:DescribeRepositories", "ecr:DescribeImages", "ecr:ListImages", "ecr:CreateRepository", "ecr:ListTagsForResource", "ecr:GetLifecyclePolicy", "ecr:PutLifecyclePolicy"]
+      Resource = "*"
+    },
+    {
+      Effect   = "Allow"
+      Action   = ["ecr:BatchCheckLayerAvailability", "ecr:GetDownloadUrlForLayer", "ecr:BatchGetImage", "ecr:PutImage", "ecr:InitiateLayerUpload", "ecr:UploadLayerPart", "ecr:CompleteLayerUpload"]
       Resource = local.github_actions_ecr_resources
     },
     {
