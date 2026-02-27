@@ -22,6 +22,7 @@ infra/scripts/iam-manage-policy.json
 infra/scripts/terraform-services-policy.json
 infra/scripts/bootstrap-state-policy.json
 infra/scripts/bootstrap-iam-policy.json
+infra/scripts/lock-key.json
 
 # perstonal notes folder
 /study
