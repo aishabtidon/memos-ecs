@@ -44,5 +44,9 @@ jobs:
       - name: Terraform Init
         run: terraform init -input=false
 
+      # Ensure role policy is up to date so destroy has all permissions
+      - name: Terraform Apply IAM (role policy only)
+        run: terraform apply -target=module.iam -var="image_tag=${{ github.sha }}" -auto-approve
+
       - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+        run: terraform destroy -var="image_tag=${{ github.sha }}" -auto-approve
