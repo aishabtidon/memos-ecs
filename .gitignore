@@ -6,8 +6,7 @@
 *.tfstate
 *.tfstate.*
 
-*.tfplan
-# Keep .terraform.lock.hcl committed (consistent provider versions)
+ /infra/.terraform.lock.hcl
 
 crash.log
 crash.*.log
@@ -17,8 +16,8 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Tfvars (optional: uncomment if you keep secrets here; CI will need vars another way)
-# infra/terraform.tfvars
+# Tfvars
+infra/terraform.tfvars
 
 # perstonal notes folder
 /study
@@ -41,4 +40,9 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Upstream app (app/memos) – we use root Dockerfile only; don't track app's git/Docker files
+app/memos/.gitignore
+app/memos/.github/
+app/memos/scripts/
 
