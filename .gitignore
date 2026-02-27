@@ -16,9 +16,6 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Tfvars
-infra/terraform.tfvars
-
 # perstonal notes folder
 /study
 
