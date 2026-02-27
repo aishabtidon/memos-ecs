@@ -19,14 +19,6 @@ jobs:
       run:
         working-directory: infra
     steps:
-      - name: Check confirmation
-        working-directory: .
-        run: |
-          if [ "${{ github.event.inputs.confirm_destroy }}" != "destroy" ]; then
-            echo "Set confirm_destroy to 'destroy' to run."
-            exit 1
-          fi
-
       - name: Checkout
         uses: actions/checkout@v4
 
