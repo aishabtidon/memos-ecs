@@ -65,6 +65,8 @@ resource "aws_iam_role" "github_actions" {
   }
 }
 
+# GitHub Actions role policy: state + services (ECS, ECR, Route53, ACM, ELB, EFS, Logs, EC2, IAM).
+# The tf-apply workflow runs "terraform apply -target=module.iam" first so this policy is applied before plan/apply.
 locals {
   execution_role_arn          = aws_iam_role.ecs_task_execution.arn
   github_actions_ecr_resources = [var.ecr_repository_arn]

@@ -1,30 +1,21 @@
 # Bootstrap GitHub Actions role (one-time)
 
-If the **Terraform Apply** workflow fails with `AccessDenied` on Route53, ACM, ELB, ECR, or EFS, the GitHub Actions role has not yet been updated with those permissions. Terraform can't update the role until apply succeeds, so you need a one-time bootstrap.
+The **Terraform Apply** workflow applies the IAM module first (`-target=module.iam`) so the role’s policy is updated before plan/apply. The very first time, the role doesn’t have those permissions yet, so you need a one-time bootstrap.
 
-**Run once** (with AWS CLI configured with credentials that can attach IAM policies):
+**Run once** (with AWS CLI credentials that can attach IAM policies):
 
 ```bash
 cd infra/scripts
 ./bootstrap-github-actions-s3.sh
 ```
 
-On Windows (PowerShell):
+On Windows (PowerShell): `bash infra/scripts/bootstrap-github-actions-s3.sh`  
+Or from repo root: `bash infra/scripts/bootstrap-github-actions-s3.sh`
 
-```powershell
-cd infra\scripts
-bash bootstrap-github-actions-s3.sh
-```
-
-Or with WSL/Git Bash from repo root:
-
-```bash
-bash infra/scripts/bootstrap-github-actions-s3.sh
-```
-
-This attaches two inline policies to `memos-dev-github-actions`:
+This attaches three inline policies to `memos-dev-github-actions`:
 
 1. **terraform-state-access** – S3 state bucket + DynamoDB lock table  
-2. **terraform-services-bootstrap** – Route53, ACM, ELB, ECR, EFS (so plan/apply can read and manage those resources)
+2. **terraform-services-bootstrap** – Route53, ACM, ELB, ECR, EFS, Logs, ECS  
+3. **terraform-iam-self-update** – IAM read/put/delete on the role and OIDC provider (so the workflow can run `apply -target=module.iam`)
 
-After that, push to `main` or re-run the **Terraform Apply** workflow; it should succeed. Terraform will then manage the role's main policy; you can remove the two inline policies later if you want everything in one managed policy.
+After that, push to `main`. The workflow will apply the IAM module (updating the role’s main policy), then plan and apply the rest. You can remove the three inline policies later if you want everything in the Terraform-managed policy only.

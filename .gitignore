@@ -21,6 +21,7 @@ infra/scripts/ec2-describe-policy.json
 infra/scripts/iam-manage-policy.json
 infra/scripts/terraform-services-policy.json
 infra/scripts/bootstrap-state-policy.json
+infra/scripts/bootstrap-iam-policy.json
 
 # perstonal notes folder
 /study
