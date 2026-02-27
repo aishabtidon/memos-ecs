@@ -93,7 +93,7 @@ locals {
     },
     {
       Effect   = "Allow"
-      Action   = ["ecs:ListClusters", "ecs:ListServices", "ecs:ListTaskDefinitions", "ecs:DescribeClusters", "ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:ListTasks", "ecs:DescribeTasks"]
+      Action   = ["ecs:ListClusters", "ecs:ListServices", "ecs:ListTaskDefinitions", "ecs:DescribeClusters", "ecs:DescribeServices", "ecs:DescribeTaskDefinition", "ecs:ListTasks", "ecs:DescribeTasks", "ecs:DeregisterTaskDefinition"]
       Resource = "*"
     },
     {
