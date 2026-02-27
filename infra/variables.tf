@@ -97,13 +97,13 @@ variable "github_branch" {
 variable "terraform_state_bucket_name" {
   description = "S3 bucket for Terraform state"
   type        = string
-  default     = ""
+  default     = "aishabtidon-terraform-state"
 }
 
 variable "terraform_state_dynamodb_table_name" {
   description = "DynamoDB table for Terraform lock"
   type        = string
-  default     = ""
+  default     = "terraform-locks"
 }
 
 # IAM
