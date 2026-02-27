@@ -112,7 +112,7 @@ locals {
 
   github_actions_iam_statement = var.github_org_repo != "" ? [{
     Effect   = "Allow"
-    Action   = ["iam:GetRole", "iam:GetOpenIDConnectProvider", "iam:ListRolePolicies", "iam:GetRolePolicy", "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole", "iam:PutRolePolicy", "iam:DeleteRolePolicy"]
+    Action   = ["iam:GetRole", "iam:GetOpenIDConnectProvider", "iam:ListRolePolicies", "iam:GetRolePolicy", "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole", "iam:PutRolePolicy", "iam:DeleteRolePolicy", "iam:DeleteRole"]
     Resource = [local.execution_role_arn, aws_iam_role.github_actions[0].arn, aws_iam_openid_connect_provider.github[0].arn]
   }] : []
 

@@ -37,9 +37,6 @@ jobs:
       - name: Terraform Init
         run: terraform init -input=false
 
-      - name: Terraform Apply IAM first
-        run: terraform apply -target=module.iam -var="image_tag=${{ github.sha }}" -auto-approve
-
       - name: Terraform Plan
         run: terraform plan -var="image_tag=${{ github.sha }}" -out=tfplan
 
