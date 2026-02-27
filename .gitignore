@@ -17,6 +17,8 @@ override.tf.json
 *_override.tf.json
 
 infra/scripts/tf-state-policy.json
+infra/scripts/ec2-describe-policy.json
+infra/scripts/iam-manage-policy.json
 
 # perstonal notes folder
 /study

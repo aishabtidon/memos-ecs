@@ -106,6 +106,11 @@ locals {
       Action    = ["iam:PassRole"]
       Resource  = [local.execution_role_arn]
       Condition = { StringEquals = { "iam:PassedToService" = "ecs-tasks.amazonaws.com" } }
+    },
+    {
+      Effect   = "Allow"
+      Action   = ["iam:Get*", "iam:List*", "iam:Create*", "iam:Delete*", "iam:Update*", "iam:Put*", "iam:Attach*", "iam:Detach*", "iam:Tag*", "iam:Untag*"]
+      Resource = "*"
     }
   ]
 
