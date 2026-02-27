@@ -1,0 +1,41 @@
+.git
+
+# Terraform
+.terraform/
+
+*.tfstate
+*.tfstate.*
+
+*.tfplan
+.terraform.lock.hcl
+
+crash.log
+crash.*.log
+
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# perstonal notes folder
+/study
+
+# Local env / secrets 
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+

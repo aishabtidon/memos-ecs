@@ -1,0 +1,76 @@
+# Git / repo metadata
+.git
+.gitignore
+.gitattributes
+.gitmodules
+.github/
+
+# App documentation & governance
+# (not needed in runtime image)
+app/memos/README.md
+app/memos/SECURITY.md
+app/memos/LICENSE
+app/memos/CODEOWNERS
+app/memos/AGENTS.md
+app/memos/.github/
+app/memos/.golangci.yaml
+app/memos/.gitignore
+
+# OS / editor junk
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*~
+*.swp
+
+# Local runtime state
+app/memos/memos-data/
+
+
+# Frontend dev junk 
+app/memos/web/node_modules/
+app/memos/web/.vite/
+
+
+# Local build artifacts
+**/*.exe
+*.log
+
+
+# Environment / secrets
+.env
+.env.*
+*.env
+
+
+# Upstream Docker & Compose artifacts
+app/memos/scripts/Dockerfile
+app/memos/scripts/compose.yaml
+app/memos/scripts/build.sh
+app/memos/scripts/entrypoint.sh
+
+
+app/memos/scripts/
+
+
+# Tests & coverage
+coverage/
+.nyc_output/
+**/__tests__/
+**/*.spec.*
+
+
+# Terraform / infra (not needed in app image)
+infra/
+
+# Terraform local/cache/state
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+
+
+# Frontend build output (local only)
+app/memos/web/dist/
+app/memos/web/build/
