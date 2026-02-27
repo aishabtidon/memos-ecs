@@ -1,0 +1,26 @@
+# Stage 3: Post-Deploy Check:curl health URL, fail pipeline if unhealthy
+name: Post-Deploy Check
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  HEALTH_CHECK_URL: https://tm.aishabtidon.org/health
+
+permissions:
+  contents: read
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for deployment to stabilize
+        run: sleep 90
+
+      - name: Health check
+        run: |
+          CODE=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 "${{ env.HEALTH_CHECK_URL }}")
+          [ "$CODE" = "200" ] || exit 1
+          echo "Health check passed (HTTP $CODE)"
