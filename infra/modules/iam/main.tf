@@ -75,7 +75,7 @@ locals {
   ]
   
 
-  github_actions_core_statements = [
+  github_actions_core_statements_no_iam = [
     {
       Effect   = "Allow"
       Action   = ["ecr:GetAuthorizationToken"]
@@ -102,17 +102,21 @@ locals {
       Resource = "*"
     },
     {
-      Effect   = "Allow"
-      Action   = ["iam:GetRole", "iam:GetOpenIDConnectProvider", "iam:ListRolePolicies", "iam:GetRolePolicy", "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole", "iam:PutRolePolicy", "iam:DeleteRolePolicy"]
-      Resource = [local.execution_role_arn, aws_iam_role.github_actions[0].arn, aws_iam_openid_connect_provider.github[0].arn]
-    },
-    {
       Effect    = "Allow"
       Action    = ["iam:PassRole"]
       Resource  = [local.execution_role_arn]
       Condition = { StringEquals = { "iam:PassedToService" = "ecs-tasks.amazonaws.com" } }
     }
   ]
+
+
+  github_actions_iam_statement = var.github_org_repo != "" ? [{
+    Effect   = "Allow"
+    Action   = ["iam:GetRole", "iam:GetOpenIDConnectProvider", "iam:ListRolePolicies", "iam:GetRolePolicy", "iam:ListAttachedRolePolicies", "iam:ListInstanceProfilesForRole", "iam:PutRolePolicy", "iam:DeleteRolePolicy"]
+    Resource = [local.execution_role_arn, aws_iam_role.github_actions[0].arn, aws_iam_openid_connect_provider.github[0].arn]
+  }] : []
+
+  github_actions_core_statements = concat(local.github_actions_core_statements_no_iam, local.github_actions_iam_statement)
 
   github_actions_policy_statements = concat(
     var.github_org_repo != "" && var.terraform_state_bucket_name != "" ? [{
