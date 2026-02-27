@@ -7,7 +7,7 @@
 *.tfstate.*
 
 *.tfplan
-.terraform.lock.hcl
+# Keep .terraform.lock.hcl committed (consistent provider versions)
 
 crash.log
 crash.*.log
@@ -16,6 +16,9 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
+# Tfvars (optional: uncomment if you keep secrets here; CI will need vars another way)
+# infra/terraform.tfvars
 
 # perstonal notes folder
 /study
