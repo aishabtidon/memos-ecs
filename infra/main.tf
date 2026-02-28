@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  ecr_repository_arn = "arn:aws:ecr:${var.aws_region}:${data.aws_caller_identity.current.account_id}:repository/${var.project_name}-${var.environment}"
+}
+
 # vpc module
 module "vpc" {
   source = "./modules/vpc"
@@ -22,7 +28,7 @@ module "sg" {
   depends_on = [module.vpc]
 }
 
-# ACM certificate for HTTPS
+# ACM certificate for HTTPS (destroyed before IAM so role exists for API calls)
 module "acm" {
   source = "./modules/acm"
 
@@ -30,9 +36,11 @@ module "acm" {
   environment  = var.environment
   domain_name  = "${var.subdomain}.${var.root_domain}"
   root_domain  = var.root_domain
+
+  depends_on = [module.iam]
 }
 
-# Application Load Balancer
+# Application Load Balancer (destroyed before IAM)
 module "alb" {
   source = "./modules/alb"
 
@@ -46,25 +54,27 @@ module "alb" {
   enable_https          = true
   acm_certificate_arn   = module.acm.certificate_arn
 
-  depends_on = [module.vpc, module.sg]
+  depends_on = [module.vpc, module.sg, module.iam]
 }
 
-# ECR repository
+# ECR repository (depends on IAM so destroy runs before IAM; role needed for ECR delete)
 module "ecr" {
   source = "./modules/ecr"
 
   project_name = var.project_name
   environment  = var.environment
+
+  depends_on = [module.iam]
 }
 
-# IAM: ECS execution role + GitHub OIDC only
+# IAM: ECS execution role + GitHub OIDC (destroyed last so role exists for entire destroy)
 module "iam" {
   source = "./modules/iam"
 
   project_name       = var.project_name
   environment        = var.environment
   aws_region         = var.aws_region
-  ecr_repository_arn = module.ecr.repository_arn
+  ecr_repository_arn = local.ecr_repository_arn
 
   github_org_repo = var.github_org_repo
   github_branch   = var.github_branch
@@ -72,7 +82,7 @@ module "iam" {
   terraform_state_dynamodb_table_name = var.terraform_state_dynamodb_table_name
 }
 
-# EFS for persistent storage 
+# EFS for persistent storage (destroyed before IAM)
 module "efs" {
   source = "./modules/efs"
 
@@ -81,7 +91,7 @@ module "efs" {
   private_subnet_ids   = module.vpc.private_subnet_ids
   efs_security_group_id = module.sg.efs_security_group_id
 
-  depends_on = [module.vpc, module.sg]
+  depends_on = [module.vpc, module.sg, module.iam]
 }
 
 # ECS Fargate service
@@ -107,7 +117,7 @@ module "ecs" {
   depends_on = [module.alb, module.ecr, module.efs, module.iam]
 }
 
-# Route53 Module
+# Route53 Module (destroyed before IAM)
 module "route53" {
   source = "./modules/route53"
 
@@ -118,5 +128,5 @@ module "route53" {
   alb_dns_name = module.alb.alb_dns_name
   alb_zone_id  = module.alb.alb_zone_id
 
-  depends_on = [module.alb]
+  depends_on = [module.alb, module.iam]
 }
