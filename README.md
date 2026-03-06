@@ -1,6 +1,6 @@
 # Memos on AWS ECS Fargate
 
-A production-style deployment of [Memos](https://github.com/usememos/memos) on AWS ECS Fargate, with infrastructure defined in Terraform and deployment automated via GitHub Actions. The setup uses a multi-AZ VPC, HTTPS (ACM), an application load balancer, Fargate tasks, EFS for persistent data, and CI/CD for image build and infrastructure updates.
+A production-style deployment of [Memos](https://github.com/usememos/memos) on AWS ECS Fargate, with infrastructure defined in Terraform and deployment automated via GitHub Actions. The setup uses a multi-AZ VPC, secure HTTPS routing ,ACM certiface validation, an application load balancer, Fargate tasks, EFS for persistent data, and CI/CD for image build and infrastructure updates.
 
 ## Table of Contents
 
@@ -34,11 +34,9 @@ For CI/CD you will also need:
 
 ## Architecture Diagram
 
-- **Draw.io:** Open `docs/architecture-infra.drawio` in [draw.io](https://app.diagrams.net/) or the Draw.io extension in VS Code.
-- **Rendered diagram:** See `docs/images/memos.drawio.png` (export from draw.io).
-- **Mermaid:** Use `docs/architecture-infra.mmd` in Mermaid Live Editor or any Mermaid-capable tool.
 
-User traffic: **User → Route 53 → Internet Gateway → ALB (HTTPS) → ECS Fargate** in private subnets; **EFS** for persistent storage; **ECR** for images; **S3** and **DynamoDB** for Terraform state and locking. CI/CD: **Developer → GitHub Actions (OIDC) → Docker → ECR**, and **GitHub Actions → Terraform** (state in S3, lock in DynamoDB).
+<img width="798" height="1274" alt="memos drawio" src="https://github.com/user-attachments/assets/8d4ec241-0ed4-4b08-8ae9-c458aef82880" />
+
 
 ## Features
 
@@ -153,13 +151,4 @@ Then run Terraform apply (or let the pipeline run it) so ECS uses the new image.
 
 ## Deployment Visuals
 
-Screenshots and diagram exports are under **docs/images/** (uploaded to the repo for reference):
-
-| Asset | Description |
-|-------|-------------|
-| **docs/images/memos.drawio.png** | Architecture diagram (export from draw.io). |
-| **docs/images/deployedwithmydomain** | Memos running in the browser at the custom domain. |
-| **docs/images/docker build** | Successful Docker Build workflow run. |
-| **docs/images/terraform apply** | Successful Terraform Apply workflow run. |
-| **docs/images/terraform destroy** | Successful Terraform Destroy workflow run. |
-| **docs/images/post-deploy check** | Post-deploy health check passing. 
+<img width="1912" height="1065" alt="Screenshot 2026-02-26 195932" src="https://github.com/user-attachments/assets/f53e2a19-b9a7-4ee4-8b4b-75b970169df1" />
