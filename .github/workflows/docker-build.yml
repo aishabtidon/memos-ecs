@@ -16,6 +16,9 @@ permissions:
 jobs:
   build-push:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,17 +29,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region:     ${{ env.AWS_REGION }}
 
-      - name: Verify workspace (diagnostic)
-        run: |
-          set -e
-          echo "Build context (repo root):"
-          ls -la
-          echo "app/memos (required for Dockerfile COPY):"
-          ls -la app/memos/
-          test -f Dockerfile || (echo "ERROR: Dockerfile not found" && exit 1)
-          test -f app/memos/web/package.json || (echo "ERROR: app/memos/web/package.json not found" && exit 1)
-          test -f app/memos/go.mod || (echo "ERROR: app/memos/go.mod not found" && exit 1)
-
+      
       - name: Login to ECR
         run: |
           set -e

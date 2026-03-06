@@ -42,4 +42,4 @@ jobs:
         run: terraform init -input=false
 
       - name: Terraform Destroy
-        run: terraform destroy -var="image_tag=${{ github.sha }}" -auto-approve
+        run: terraform destroy -var="image_tag=${{ github.sha }}" -auto-approve -lock=false
